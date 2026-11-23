@@ -185,5 +185,5 @@ Standard: Latest
 TabWidth: 4
 # TypenameMacros
 LineEnding: DeriveLF
-UseTab: ForContinuationAndIndentation
+# UseTab: Never
 # WhitespaceSensitiveMacros

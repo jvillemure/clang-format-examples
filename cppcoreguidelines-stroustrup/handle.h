@@ -64,14 +64,14 @@ inline constexpr bool is_gst_mini_object = enable_gst_mini_object<std::remove_cv
 
 namespace detail {
 
-	// Every mini object starts with its GstMiniObject; GST_MINI_OBJECT_CAST relies on the same.
-	template<typename T>
-		requires is_gst_mini_object<T>
-	GstMiniObject* as_mini_object(T* object) noexcept
-	{
-		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-		return reinterpret_cast<GstMiniObject*>(object);
-	}
+    // Every mini object starts with its GstMiniObject; GST_MINI_OBJECT_CAST relies on the same.
+    template<typename T>
+        requires is_gst_mini_object<T>
+    GstMiniObject* as_mini_object(T* object) noexcept
+    {
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+        return reinterpret_cast<GstMiniObject*>(object);
+    }
 
 } // namespace detail
 
@@ -89,32 +89,32 @@ namespace detail {
 
 // GstObject derived types, reference counted through the GObject machinery.
 template<typename T>
-	requires gstu::is_gst_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
+    requires gstu::is_gst_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
 void intrusive_ptr_add_ref(T* object) noexcept
 {
-	gst_object_ref(object);
+    gst_object_ref(object);
 }
 
 template<typename T>
-	requires gstu::is_gst_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
+    requires gstu::is_gst_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
 void intrusive_ptr_release(T* object) noexcept
 {
-	gst_object_unref(object);
+    gst_object_unref(object);
 }
 
 // GstMiniObject derived types, which have their own lighter reference counting.
 template<typename T>
-	requires gstu::is_gst_mini_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
+    requires gstu::is_gst_mini_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
 void intrusive_ptr_add_ref(T* object) noexcept
 {
-	gst_mini_object_ref(gstu::detail::as_mini_object(object));
+    gst_mini_object_ref(gstu::detail::as_mini_object(object));
 }
 
 template<typename T>
-	requires gstu::is_gst_mini_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
+    requires gstu::is_gst_mini_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
 void intrusive_ptr_release(T* object) noexcept
 {
-	gst_mini_object_unref(gstu::detail::as_mini_object(object));
+    gst_mini_object_unref(gstu::detail::as_mini_object(object));
 }
 
 namespace gstu {
@@ -122,7 +122,7 @@ namespace gstu {
 // ----- [ Shared ownership handles ] -----
 
 template<typename T>
-	requires gstu::is_gst_mini_object<T> || gstu::is_gst_object<T>
+    requires gstu::is_gst_mini_object<T> || gstu::is_gst_object<T>
 using Handle = boost::intrusive_ptr<T>;
 
 using Object_ptr = Handle<GstObject>;
@@ -153,22 +153,22 @@ using Context_ptr = Handle<GstContext>;
 template<typename T>
 auto adopt(T* object) noexcept
 {
-	return Handle<T>{object, false};
+    return Handle<T>{object, false};
 }
 
 // "transfer none": the callee keeps its reference, take one of our own.
 template<typename T>
 auto share(T* object) noexcept
 {
-	return Handle<T>{object};
+    return Handle<T>{object};
 }
 
 // "transfer floating": GObject constructors hand out a floating reference, sink it first.
 template<typename T>
-	requires is_gst_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
+    requires is_gst_object<T> && std::is_same_v<T, std::remove_cv_t<T>>
 auto adopt_floating(T* object) noexcept
 {
-	return object ? gstu::adopt(static_cast<T*>(gst_object_ref_sink(object))) : nullptr;
+    return object ? gstu::adopt(static_cast<T*>(gst_object_ref_sink(object))) : nullptr;
 }
 
 // ----- [ Unique ownership handles ] -----
@@ -201,11 +201,11 @@ using ztd::out_ptr::inout_ptr;
 #endif // __cpp_lib_out_ptr >= 202106l
 
 struct Error_deleter {
-	void operator()(GError* error) const noexcept { g_error_free(error); }
+    void operator()(GError* error) const noexcept { g_error_free(error); }
 };
 
 struct Chars_deleter {
-	void operator()(char* text) const noexcept { g_free(text); }
+    void operator()(char* text) const noexcept { g_free(text); }
 };
 
 // GError is not reference counted, so unique ownership is all it needs.

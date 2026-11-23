@@ -1,0 +1,36 @@
+---
+BasedOnStyle: Google
+---
+Language: Cpp
+AccessModifierOffset: -2
+BraceWrapping:
+  AfterFunction: true
+  SplitEmptyRecord: false
+BreakAfterReturnType: Automatic
+BreakBeforeBraces: Custom
+BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterColon
+ColumnLimit: 120
+CommentPragmas: "^ NOLINT"
+ContinuationIndentWidth: 2
+DerivePointerAlignment: false
+EmptyLineBeforeAccessModifier: Leave
+IncludeBlocks: Merge
+IncludeCategories:
+  - Regex: '^".*'
+    Priority: 1
+  - Regex: '^".+/.*'
+    Priority: 2
+  - Regex: "^<.+/.*"
+    Priority: 3
+  - Regex: '^<.*\.h>'
+    Priority: 4
+  - Regex: "^<.*"
+    Priority: 5
+IndentExportBlock: false
+MaxEmptyLinesToKeep: 2
+QualifierAlignment: Left
+SpaceAfterTemplateKeyword: false
+SpaceBeforeParensOptions:
+  AfterRequiresInClause: true
+...
